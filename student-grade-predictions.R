@@ -19,10 +19,15 @@ student_data <- read.csv("student-mat.csv", sep=";")
 clean_data <- student_data %>% 
   na.omit() %>%
   transmute(
-    classes_failed = failures,
+            classes_failed = failures,
             hours_studied = studytime,
             absences,
-            finalgrade = G3
+            travel_time = traveltime,
+            free_time = freetime,
+            workday_drinking = Dalc,
+            weekend_drinking = Walc,
+            health,
+            final_grade = G3
     )
 
 
@@ -46,7 +51,7 @@ testing_data <- clean_data[-training_indicies, ]
 # -------------------------------
 
 # Create linear regression model, fit to training data
-model <- lm(finalgrade ~ classes_failed + hours_studied + absences,
+model <- lm(final_grade ~ classes_failed + hours_studied + absences + travel_time + free_time + weekend_drinking + workday_drinking + health,
             data = training_data)
 
 
@@ -59,11 +64,11 @@ grade_predictions <- predict(model, newdata = testing_data)
 
 
 # -------------------------------
-# Assess Regression Accuracy
+# 6. Assess Regression Accuracy
 # -------------------------------
 
-# Calculate Mean Standard Error
-mse <- mean((testing_data$finalgrade - grade_predictions)^2)
+# Calculate mean standard error
+mse <- mean((testing_data$final_grade - grade_predictions)^2)
 
-# Calculate Root Mean Standard Error
+# Calculate root mean standard error
 rmse <- sqrt(mse)
