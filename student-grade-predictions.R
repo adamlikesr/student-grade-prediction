@@ -72,3 +72,34 @@ mse <- mean((testing_data$final_grade - grade_predictions)^2)
 
 # Calculate root mean standard error
 rmse <- sqrt(mse)
+
+
+#-----------------------------
+# 7. Build Function
+#-----------------------------
+
+inputPredict <- 
+  function(user_classes_failed, user_hours_studied, user_absences, 
+                         user_travel_time, user_free_time, user_weekend_drinking, 
+                         user_workday_drinking, user_health)
+  {
+    # Create new data frame to store user inputs
+    user_data <- data.frame(
+      classes_failed = user_classes_failed,
+      hours_studied = user_hours_studied,
+      absences = user_absences,
+      travel_time = user_travel_time,
+      free_time = user_free_time,
+      workday_drinking = user_workday_drinking,
+      weekend_drinking = user_weekend_drinking,
+      health = user_health
+      )
+    
+    # Predict user's grade based off of inputs, removes vector name in output
+    user_prediction = unname(predict(model, newdata = user_data))
+    
+    # Return user's grade prediction
+    return(user_prediction)
+}
+
+
